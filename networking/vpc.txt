@@ -4,7 +4,7 @@
   (without vpn gateway) communicate to each other.
   - create one VPC and put subnet under it in different regions.
   - communication between vms in different regions is handled by googles underlying network.(same network google uses for search engine, youtube, gmail, etc...)
-  - In Traditional/AWS multiple vpc need to create, VPN gateway for every vpc to connect to internet but in GCP one VPC so one VPN gateway, multiple subnets and VMs
+  - In Traditional/AWS multiple vpc need to create for each region, VPN gateway for every vpc to connect to internet but in GCP one VPC so one VPN gateway, multiple subnets and VMs
     - helpful in large project where there is need to create multiple VPC and subnets in different regions, its hard to maintain, GCP VPC is simple.
 
 *VPC Network?
