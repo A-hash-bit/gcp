@@ -1,0 +1,64 @@
+* GCP vpc is different than AWS vpc.
+- in AWS vpc1(in region1)can communicate with vpc2(in region 2) via VPN/VPC gateway, not directly.(need to create VPN gateway in every vpc to connect to internet)
+- in GCP vpc is global construct. Every region and its resources can come under one VPC. so here directly subnets can be created in regions and subnet from different region can directly
+  (without vpn gateway) communicate to each other.
+  - create one VPC and put subnet under it in different regions.
+  - communication between vms in different regions is handled by googles underlying network.(same network google uses for search engine, youtube, gmail, etc...)
+  - In Traditional/AWS multiple vpc need to create, VPN gateway for every vpc to connect to internet but in GCP one VPC so one VPN gateway, multiple subnets and VMs
+    - helpful in large project where there is need to create multiple VPC and subnets in different regions, its hard to maintain, GCP VPC is simple.
+
+*VPC Network?
+  - same as physical network, just virtualised in cloud. 
+    - vpc is global (on-prem/cloud), which consists list of regional virtual subnetwork(subnets) in data center. All this is connected via global wide area network.
+      vpc network are logically isolated from other vpcs in gcp.
+
+*GCP VPC Functionalities:
+    - Gcp VPC provides network functionality to compute (VMs,GKE containers,app engine, other services build on compute).
+    - provide network connnectivity for your compute engine VM.
+    - built-in internal TCP/UDP load balancing and proxy system for internal(HTTP/S) LB.
+    - connect to on-prem network using cloud VPN tunnels and cloud Interconnect attachments.
+    - distribute traffic from google cloud external load balancers to backend.
+
+# Basic VPC architecture
+      One VPC --> Mutiple Regions --> each region will have subnets & Each region will have 3 or more AZ(Zone). 
+                 * region - geo location with physical server , Zone - actual server, Zone are physically isolated., Subnet - Segment of large network. VM created inside subnet.
+                   & instances can communicate with each with private ip inside vpc.
+      VPC will have VPC routing - helps server connect to internet, it decide how to send traffic from VM to destination(dest can be - other VM or internet).
+  * General terms:
+      IP address: each VM get internal & External IP. IP are ephimeral and can be assigned static IPs
+        - Internal IP used to communicate with other VMs in same VPC.
+        - External IP to communicate to VM in other network or Internet.
+      Route: it tells VPC how to send traffic from an instance to dest.(dest can be inside or outside of network(internet))
+             we can create custom static routes to direct packets to specific dest.
+             Each VPC have system generated routes:
+               1. default route - defines path for traffic to leave VPC. provide general internet access to VMs. provide path for private google access.
+               2. subnet route - communication within network by internal IP. need to configure appropriate firewall rules.(every VM has ingress firewall).
+      Firewall: each VPC implement a distributed virtual firewall, it allow u to control which packet can travel to which dest. allow/deny communication to /from VMs.
+
+* Benifits of GCP VPC:
+        1. its global. so communication between diffrent subnets/regions without internet.
+        2. Proper isolation.
+        3. Entire org. can share same VPC.
+        4. Expandable - allow u to increase IP space of any subnet without downtime, no service shutdown.
+
+* GCP LB - balance load or user traffic across multiple VMs, reduce risk of performance issues.
+      GCP offer 6 types of LBs:
+        * External
+        1. External HTTP/s LB.
+        2. SSL Proxy LB.
+        3. TCP Proxy LB.
+        4. TCP/UDP Network LB
+        * Internal
+        1. Internal TCP/UDP LB.
+        2. Internal HTTP/s LB.
+
+* cloud DNS service
+    - DNS is hirarchically distributed DB which store IP add. and other data and let us search by name. DNS helps convert URL to IP add. DNS keeps these directories which have IP/Domain name data.
+    - GCP provide reliable, scalable and managed domain name service, running on same info as google.
+    - Cloud DNS is high performance, resiliante, global and cost effective.
+                 - Cloud DNS have public(For all) and private(for specific VPCs only) DNS zones.  
+                
+                 
+        
+      
+                                  
